@@ -1,0 +1,10 @@
+{
+  "name": "MeshAlert Emergency Communication",
+  "short_name": "MeshAlert",
+  "description": "Offline-first mesh emergency communication for network blackout areas",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0b1220",
+  "theme_color": "#b91c1c",
+  "icons": []
+}

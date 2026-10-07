@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#b91c1c">
+  <title>MeshAlert — Offline Emergency Communication</title>
+  <link rel="manifest" href="./manifest.json">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <main class="app">
+    <header class="top">
+      <div class="brand">
+        <div class="mark">MA</div>
+        <div>
+          <h1>MeshAlert</h1>
+          <p class="sub">Cloud-connected emergency communication for network blackout areas. Offline-first, mesh relay ready.</p>
+        </div>
+      </div>
+      <div class="pills">
+        <span class="pill" id="net-pill"><span class="dot"></span>Checking network</span>
+        <span class="pill" id="mesh-pill"><span class="dot mesh"></span>Mesh peers: —</span>
+        <span class="pill" id="cloud-pill"><span class="dot"></span>Cloud</span>
+      </div>
+    </header>
+
+    <section class="grid">
+      <form class="card" id="report-form">
+        <h2>File an incident</h2>
+        <p class="hint">Stored on this device first. If the network is down, the report is queued for nearby mesh relay and cloud sync later.</p>
+
+        <label for="incident">Type of incident</label>
+        <select id="incident" name="incident" required>
+          <option value="">Select incident type</option>
+          <option>Medical emergency</option>
+          <option>Fire</option>
+          <option>Flood / natural disaster</option>
+          <option>Road accident</option>
+          <option>Security / crime</option>
+          <option>Missing person</option>
+          <option>Building collapse</option>
+          <option>Infrastructure failure</option>
+          <option>Other</option>
+        </select>
+
+        <div class="row">
+          <div>
+            <label for="number">Emergency number</label>
+            <input id="number" name="number" type="tel" inputmode="tel" placeholder="e.g. 112 or 199" required>
+          </div>
+          <div>
+            <label for="location">Location</label>
+            <div class="loc">
+              <input id="location" name="location" placeholder="Landmark, address, or coordinates" required>
+              <button class="ghost" type="button" id="locate">Use GPS</button>
+            </div>
+          </div>
+        </div>
+
+        <label for="note">Short note (optional)</label>
+        <textarea id="note" name="note" placeholder="People injured, access route, what help is needed"></textarea>
+
+        <div class="actions">
+          <button class="primary" type="submit">Send emergency report</button>
+          <button class="ghost" type="button" id="clear">Clear local queue</button>
+        </div>
+      </form>
+
+      <aside class="card">
+        <h2>Mesh path</h2>
+        <p class="hint">Nearby phones act as relays when cell and Wi-Fi are down. This page keeps working from cache.</p>
+        <div class="mesh" aria-hidden="true">
+          <svg class="links" viewBox="0 0 320 220">
+            <line x1="160" y1="108" x2="58" y2="48" stroke="#38bdf8" stroke-width="1.4" opacity="0.7"/>
+            <line x1="160" y1="108" x2="262" y2="52" stroke="#38bdf8" stroke-width="1.4" opacity="0.7"/>
+            <line x1="160" y1="108" x2="70" y2="168" stroke="#38bdf8" stroke-width="1.4" opacity="0.7"/>
+            <line x1="160" y1="108" x2="250" y2="170" stroke="#ef4444" stroke-width="1.6" opacity="0.85"/>
+            <line x1="58" y1="48" x2="262" y2="52" stroke="#38bdf8" stroke-width="1" opacity="0.35"/>
+          </svg>
+          <div class="node" style="left:34px;top:28px"><span>A</span>Peer</div>
+          <div class="node" style="left:238px;top:30px"><span>B</span>Peer</div>
+          <div class="node you" style="left:132px;top:86px"><span>You</span>This device</div>
+          <div class="node" style="left:46px;top:148px"><span>C</span>Peer</div>
+          <div class="node" style="left:226px;top:150px"><span>☁</span>Cloud</div>
+        </div>
+        <div id="status-banner" class="banner">Checking link…</div>
+        <p class="hint" style="margin:12px 0 0">Queued for relay: <strong id="queue-count">0</strong></p>
+      </aside>
+    </section>
+
+    <section class="card" style="margin-top:16px">
+      <h2>Local report log</h2>
+      <p class="hint">This log survives refresh and works offline. It is not a live dispatch center until a cloud backend is connected.</p>
+      <div class="list" id="alert-list"></div>
+    </section>
+
+    <footer class="note">
+      Demo architecture: browser cache + service worker for offline open, local storage as the store-and-forward queue, and an online/offline listener that marks reports cloud-synced when connectivity returns. A production mesh path would add BLE / Wi-Fi Direct peer discovery and a cloud API for responders. Emergency numbers shown here are entered by the reporter; confirm local numbers (for example 112) before field use.
+    </footer>
+  </main>
+  <script src="./app.js"></script>
+</body>
+</html>
